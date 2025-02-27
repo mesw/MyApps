@@ -8,8 +8,25 @@ struct HelloGuiNoLayout : TopWindow {
 
 	Point p;
 	String text;
+	MenuBar menu;
 
 	void Close() override { delete this; }
+	void Exit()
+	{
+		if (PromptOKCancel("Are you sure you want to quit?")) 
+			Break();
+	}
+	void SubMenu(Bar& bar) 
+	{
+		bar.Add("Info",[=] { PromptOK("This is the info."); });	
+		bar.Add("Exit",[=] { Exit(); });	
+	}
+
+	void MainMenu(Bar& bar)
+	{
+		bar.Sub("Menu", [=] (Bar& bar) { SubMenu(bar); });
+	 	bar.Sub("Info", [=] (Bar& bar) { SubMenu(bar); });
+	}
 
 	void LeftDown(Point pos, dword flags) override
 	{
@@ -67,7 +84,7 @@ struct HelloGuiNoLayout : TopWindow {
 		// is called.
 		static int ptSize = 20;
 		Upp::Font font2 = Upp::Arial(ptSize);
-		Upp::String text2 = Upp::String() << "Funny";
+		Upp::String text2 = Upp::String() << "Popcorn";
 		if(GetTextSize(text2, font2).cx < 800)
 			ptSize++;
 		if(GetTextSize(text2, font2).cx > 800)
@@ -82,6 +99,8 @@ struct HelloGuiNoLayout : TopWindow {
 		Zoomable(false);
 		// FrameLess(true);
 		SetRect(0, 0, 800, 480);
+		AddFrame(menu);
+		menu.Set([=](Bar& bar){MainMenu(bar);});
 	}
 };
 
