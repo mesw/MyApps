@@ -1,0 +1,11 @@
+uses
+	CtrlLib;
+
+file
+	main.cpp,
+	EnjoyableTemperatureCalculator.h,
+	EnjoyableTemperatureCalculator.lay;
+
+mainconfig
+	"" = "GUI";
+
